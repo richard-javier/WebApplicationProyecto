@@ -1,41 +1,78 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApplicationProyecto.Data;
-using WebApplicationProyecto.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
+using WebApplicationBackend.Entidades;
+using WebApplicationBackend.Repositorio;
 
-namespace WebApplicationProyecto.Controllers
+namespace WebApplicationBackend.Controllers
 {
+    [Route("api/login")]
     [ApiController]
-    [Route("[controller]")]
     public class LoginController : ControllerBase
     {
-        private readonly DbContext _context;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IRepositorioLogin _repositorioLogin;
 
-        public LoginController(DbContext context, IAuthenticationService authenticationService)
+        public LoginController(IRepositorioLogin repositorioLogin)
         {
-            _context = context;
-            _authenticationService = authenticationService;
+            _repositorioLogin = repositorioLogin;
         }
 
-        // POST: api/Login
-        [HttpPost]
-        public async Task<ActionResult<string>> Login(LoginModel model)
+        [HttpGet]
+        public ActionResult<IEnumerable<Login>> Get()
         {
-            var user = await _context.Users.FindAsync(model.Username);
-            if (user == null)
+            return Ok(_repositorioLogin.GetAll());
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<Login> Get(int id)
+        {
+            var login = _repositorioLogin.GetById(id);
+            if (login == null)
             {
-                return Unauthorized("Invalid username or password");
+                return NotFound();
+            }
+            return Ok(login);
+        }
+
+        [HttpPost]
+        public ActionResult<Login> Post([FromBody] Login login)
+        {
+            if (login == null)
+            {
+                return BadRequest();
+            }
+            _repositorioLogin.Add(login);
+            return CreatedAtAction(nameof(Get), new { id = login.Id }, login);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] Login login)
+        {
+            if (login == null || login.Id != id)
+            {
+                return BadRequest();
             }
 
-            if (!_authenticationService.VerifyPasswordHash(model.Password, user.PasswordHash))
+            var existingLogin = _repositorioLogin.GetById(id);
+            if (existingLogin == null)
             {
-                return Unauthorized("Invalid username or password");
+                return NotFound();
             }
 
-            var token = await _authenticationService.GenerateToken(user);
-            return Ok(token);
+            _repositorioLogin.Update(login);
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var login = _repositorioLogin.GetById(id);
+            if (login == null)
+            {
+                return NotFound();
+            }
+
+            _repositorioLogin.Delete(id);
+            return NoContent();
         }
     }
 }
