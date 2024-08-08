@@ -15,6 +15,13 @@ namespace WebApplicationBackend
         public DbSet<ForgotPassword> ForgotPasswords { get; set; }
         public DbSet<ListaRegistros> ListaRegistros { get; set; }
 
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Compra> Compras { get; set; }
+        public DbSet<DetalleCompra> DetallesCompras { get; set; }
+        public DbSet<Venta> Ventas { get; set; }
+        public DbSet<DetalleVenta> DetallesVentas { get; set; }
+        public DbSet<Producto> Productos { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -24,6 +31,12 @@ namespace WebApplicationBackend
                     options => options.MigrationsAssembly("WebApplicationBackend")
                 );
             }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            // Configuración adicional (si es necesaria)
         }
     }
 }

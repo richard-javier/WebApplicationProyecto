@@ -13,10 +13,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:5000", "https://localhost:7235")
+        policy.WithOrigins("http://localhost:4200", "https://localhost:7235") // Ajusta según sea necesario
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowAnyMethod();
     });
 });
 
@@ -30,6 +29,10 @@ builder.Services.AddScoped<IRepositorioForgotPassword, RepositorioForgotPassword
 builder.Services.AddScoped<IRepositorioListaRegistros, RepositorioListaRegistros>();
 builder.Services.AddScoped<IRepositorioRegister, RepositorioRegister>();
 builder.Services.AddScoped<IRepositorioLogin, RepositorioLogin>();
+builder.Services.AddScoped<IRepositorioCliente, RepositorioCliente>();
+builder.Services.AddScoped<IRepositorioCompra, RepositorioCompra>();
+builder.Services.AddScoped<IRepositorioVenta, RepositorioVenta>();
+builder.Services.AddScoped<IRepositorioInventario, RepositorioInventario>();
 
 // Configuración de Swagger
 builder.Services.AddEndpointsApiExplorer();

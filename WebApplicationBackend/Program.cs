@@ -15,6 +15,10 @@ builder.Services.AddScoped<IRepositorioForgotPassword, RepositorioForgotPassword
 builder.Services.AddScoped<IRepositorioListaRegistros, RepositorioListaRegistros>();
 builder.Services.AddScoped<IRepositorioRegister, RepositorioRegister>();
 builder.Services.AddScoped<IRepositorioLogin, RepositorioLogin>();
+builder.Services.AddScoped<IRepositorioCliente, RepositorioCliente>();
+builder.Services.AddScoped<IRepositorioCompra, RepositorioCompra>();
+builder.Services.AddScoped<IRepositorioVenta, RepositorioVenta>();
+builder.Services.AddScoped<IRepositorioInventario, RepositorioInventario>();
 
 // Configurar CORS
 builder.Services.AddCors(options =>

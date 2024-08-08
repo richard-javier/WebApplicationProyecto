@@ -4,29 +4,29 @@ using WebApplicationBackend.Repositorio;
 
 namespace WebApplicationBackend.Controllers
 {
-    [Route("api/register")]
+    [Route("api/venta")]
     [ApiController]
-    public class RegisterController : ControllerBase
+    public class VentaController : ControllerBase
     {
-        private readonly IRepositorioRegister _repositorioRegister;
+        private readonly IRepositorioVenta _repositorioVenta;
 
-        public RegisterController(IRepositorioRegister repositorioRegister)
+        public VentaController(IRepositorioVenta repositorioVenta)
         {
-            _repositorioRegister = repositorioRegister;
+            _repositorioVenta = repositorioVenta;
         }
 
         [HttpPost]
-        public IActionResult Register([FromBody] Register register)
+        public IActionResult Create([FromBody] Venta venta)
         {
-            if (register == null)
+            if (venta == null)
             {
                 return BadRequest("Invalid data.");
             }
 
             try
             {
-                _repositorioRegister.Add(register);
-                return Ok(new { message = "Registration successful." });
+                _repositorioVenta.Add(venta);
+                return Ok(new { message = "Sale added successfully." });
             }
             catch (Exception ex)
             {
@@ -39,8 +39,8 @@ namespace WebApplicationBackend.Controllers
         {
             try
             {
-                var users = _repositorioRegister.GetAll();
-                return Ok(users);
+                var sales = _repositorioVenta.GetAll();
+                return Ok(sales);
             }
             catch (Exception ex)
             {
@@ -53,12 +53,12 @@ namespace WebApplicationBackend.Controllers
         {
             try
             {
-                var user = _repositorioRegister.GetById(id);
-                if (user == null)
+                var sale = _repositorioVenta.GetById(id);
+                if (sale == null)
                 {
-                    return NotFound("User not found.");
+                    return NotFound("Sale not found.");
                 }
-                return Ok(user);
+                return Ok(sale);
             }
             catch (Exception ex)
             {
@@ -67,23 +67,23 @@ namespace WebApplicationBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Register register)
+        public IActionResult Update(int id, [FromBody] Venta venta)
         {
-            if (register == null || id != register.Id)
+            if (venta == null || id != venta.VentaId)
             {
                 return BadRequest("Invalid data.");
             }
 
             try
             {
-                var existingUser = _repositorioRegister.GetById(id);
-                if (existingUser == null)
+                var existingSale = _repositorioVenta.GetById(id);
+                if (existingSale == null)
                 {
-                    return NotFound("User not found.");
+                    return NotFound("Sale not found.");
                 }
 
-                _repositorioRegister.Update(register);
-                return Ok("User updated successfully.");
+                _repositorioVenta.Update(venta);
+                return Ok("Sale updated successfully.");
             }
             catch (Exception ex)
             {
@@ -96,14 +96,14 @@ namespace WebApplicationBackend.Controllers
         {
             try
             {
-                var user = _repositorioRegister.GetById(id);
-                if (user == null)
+                var sale = _repositorioVenta.GetById(id);
+                if (sale == null)
                 {
-                    return NotFound("User not found.");
+                    return NotFound("Sale not found.");
                 }
 
-                _repositorioRegister.Delete(id);
-                return Ok("User deleted successfully.");
+                _repositorioVenta.Delete(id);
+                return Ok("Sale deleted successfully.");
             }
             catch (Exception ex)
             {

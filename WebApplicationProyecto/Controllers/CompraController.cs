@@ -4,29 +4,29 @@ using WebApplicationBackend.Repositorio;
 
 namespace WebApplicationBackend.Controllers
 {
-    [Route("api/register")]
+    [Route("api/compra")]
     [ApiController]
-    public class RegisterController : ControllerBase
+    public class CompraController : ControllerBase
     {
-        private readonly IRepositorioRegister _repositorioRegister;
+        private readonly IRepositorioCompra _repositorioCompra;
 
-        public RegisterController(IRepositorioRegister repositorioRegister)
+        public CompraController(IRepositorioCompra repositorioCompra)
         {
-            _repositorioRegister = repositorioRegister;
+            _repositorioCompra = repositorioCompra;
         }
 
         [HttpPost]
-        public IActionResult Register([FromBody] Register register)
+        public IActionResult Create([FromBody] Compra compra)
         {
-            if (register == null)
+            if (compra == null)
             {
                 return BadRequest("Invalid data.");
             }
 
             try
             {
-                _repositorioRegister.Add(register);
-                return Ok(new { message = "Registration successful." });
+                _repositorioCompra.Add(compra);
+                return Ok(new { message = "Purchase added successfully." });
             }
             catch (Exception ex)
             {
@@ -39,8 +39,8 @@ namespace WebApplicationBackend.Controllers
         {
             try
             {
-                var users = _repositorioRegister.GetAll();
-                return Ok(users);
+                var purchases = _repositorioCompra.GetAll();
+                return Ok(purchases);
             }
             catch (Exception ex)
             {
@@ -53,12 +53,12 @@ namespace WebApplicationBackend.Controllers
         {
             try
             {
-                var user = _repositorioRegister.GetById(id);
-                if (user == null)
+                var purchase = _repositorioCompra.GetById(id);
+                if (purchase == null)
                 {
-                    return NotFound("User not found.");
+                    return NotFound("Purchase not found.");
                 }
-                return Ok(user);
+                return Ok(purchase);
             }
             catch (Exception ex)
             {
@@ -67,23 +67,23 @@ namespace WebApplicationBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Register register)
+        public IActionResult Update(int id, [FromBody] Compra compra)
         {
-            if (register == null || id != register.Id)
+            if (compra == null || id != compra.CompraId)
             {
                 return BadRequest("Invalid data.");
             }
 
             try
             {
-                var existingUser = _repositorioRegister.GetById(id);
-                if (existingUser == null)
+                var existingPurchase = _repositorioCompra.GetById(id);
+                if (existingPurchase == null)
                 {
-                    return NotFound("User not found.");
+                    return NotFound("Purchase not found.");
                 }
 
-                _repositorioRegister.Update(register);
-                return Ok("User updated successfully.");
+                _repositorioCompra.Update(compra);
+                return Ok("Purchase updated successfully.");
             }
             catch (Exception ex)
             {
@@ -96,14 +96,14 @@ namespace WebApplicationBackend.Controllers
         {
             try
             {
-                var user = _repositorioRegister.GetById(id);
-                if (user == null)
+                var purchase = _repositorioCompra.GetById(id);
+                if (purchase == null)
                 {
-                    return NotFound("User not found.");
+                    return NotFound("Purchase not found.");
                 }
 
-                _repositorioRegister.Delete(id);
-                return Ok("User deleted successfully.");
+                _repositorioCompra.Delete(id);
+                return Ok("Purchase deleted successfully.");
             }
             catch (Exception ex)
             {

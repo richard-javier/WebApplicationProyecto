@@ -4,29 +4,29 @@ using WebApplicationBackend.Repositorio;
 
 namespace WebApplicationBackend.Controllers
 {
-    [Route("api/register")]
+    [Route("api/cliente")]
     [ApiController]
-    public class RegisterController : ControllerBase
+    public class ClienteController : ControllerBase
     {
-        private readonly IRepositorioRegister _repositorioRegister;
+        private readonly IRepositorioCliente _repositorioCliente;
 
-        public RegisterController(IRepositorioRegister repositorioRegister)
+        public ClienteController(IRepositorioCliente repositorioCliente)
         {
-            _repositorioRegister = repositorioRegister;
+            _repositorioCliente = repositorioCliente;
         }
 
         [HttpPost]
-        public IActionResult Register([FromBody] Register register)
+        public IActionResult Create([FromBody] Cliente cliente)
         {
-            if (register == null)
+            if (cliente == null)
             {
                 return BadRequest("Invalid data.");
             }
 
             try
             {
-                _repositorioRegister.Add(register);
-                return Ok(new { message = "Registration successful." });
+                _repositorioCliente.Add(cliente);
+                return Ok(new { message = "Client added successfully." });
             }
             catch (Exception ex)
             {
@@ -39,8 +39,8 @@ namespace WebApplicationBackend.Controllers
         {
             try
             {
-                var users = _repositorioRegister.GetAll();
-                return Ok(users);
+                var clients = _repositorioCliente.GetAll();
+                return Ok(clients);
             }
             catch (Exception ex)
             {
@@ -53,12 +53,12 @@ namespace WebApplicationBackend.Controllers
         {
             try
             {
-                var user = _repositorioRegister.GetById(id);
-                if (user == null)
+                var client = _repositorioCliente.GetById(id);
+                if (client == null)
                 {
-                    return NotFound("User not found.");
+                    return NotFound("Client not found.");
                 }
-                return Ok(user);
+                return Ok(client);
             }
             catch (Exception ex)
             {
@@ -67,23 +67,23 @@ namespace WebApplicationBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Register register)
+        public IActionResult Update(int id, [FromBody] Cliente cliente)
         {
-            if (register == null || id != register.Id)
+            if (cliente == null || id != cliente.ClienteId)
             {
                 return BadRequest("Invalid data.");
             }
 
             try
             {
-                var existingUser = _repositorioRegister.GetById(id);
-                if (existingUser == null)
+                var existingClient = _repositorioCliente.GetById(id);
+                if (existingClient == null)
                 {
-                    return NotFound("User not found.");
+                    return NotFound("Client not found.");
                 }
 
-                _repositorioRegister.Update(register);
-                return Ok("User updated successfully.");
+                _repositorioCliente.Update(cliente);
+                return Ok("Client updated successfully.");
             }
             catch (Exception ex)
             {
@@ -96,14 +96,14 @@ namespace WebApplicationBackend.Controllers
         {
             try
             {
-                var user = _repositorioRegister.GetById(id);
-                if (user == null)
+                var client = _repositorioCliente.GetById(id);
+                if (client == null)
                 {
-                    return NotFound("User not found.");
+                    return NotFound("Client not found.");
                 }
 
-                _repositorioRegister.Delete(id);
-                return Ok("User deleted successfully.");
+                _repositorioCliente.Delete(id);
+                return Ok("Client deleted successfully.");
             }
             catch (Exception ex)
             {
